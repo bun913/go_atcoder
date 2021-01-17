@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"math/big"
 	"os"
 	"sort"
@@ -17,8 +18,46 @@ func init() {
 	sc.Buffer(buf, max)
 }
 
+type player struct {
+	index int
+	rate  int
+}
+
 func main() {
 	StrToInt(NextLine(sc))
+	aList := SplitIntlist(NextLine(sc))
+	players := []player{}
+	for i, elm := range aList {
+		p := player{
+			index: i,
+			rate:  elm,
+		}
+		players = append(players, p)
+	}
+	// Sliceをqueのような形で使い要素を減らしていく
+	res := 0
+	endFlag := false
+	for !endFlag {
+		p1 := players[0]
+		players = players[1:]
+		p2 := players[0]
+		players = players[1:]
+		// 最後の２組の場合
+		if len(players) == 0 {
+			if p1.rate > p2.rate {
+				res = p2.index + 1
+			} else {
+				res = p1.index + 1
+			}
+			break
+		}
+		if p1.rate > p2.rate {
+			players = append(players, p1)
+		} else {
+			players = append(players, p2)
+		}
+	}
+	fmt.Println(res)
 }
 
 // Reverse 文字列を反転

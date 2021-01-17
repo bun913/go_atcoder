@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"math/big"
 	"os"
 	"sort"
@@ -12,13 +13,31 @@ import (
 var sc = bufio.NewScanner(os.Stdin)
 
 func init() {
-	const max = 1024 * 1024 * 1024
+	const max = 1024 * 256
 	var buf = make([]byte, max)
 	sc.Buffer(buf, max)
 }
 
 func main() {
-	StrToInt(NextLine(sc))
+	N := StrToInt(GetNextLine(sc))
+	xyList := [][]int{}
+	for range make([]int, N) {
+		xyList = append(xyList, GetSpaceSplitIntlist(GetNextLine(sc)))
+	}
+	total := 0
+	for i := 0; i < len(xyList); i++ {
+		for k := i + 1; k < len(xyList); k++ {
+			x1 := float64(xyList[i][0])
+			x2 := float64(xyList[k][0])
+			y1 := float64(xyList[i][1])
+			y2 := float64(xyList[k][1])
+			a := (y2 - y1) / (x2 - x1)
+			if a >= float64(-1) && a <= float64(1) {
+				total++
+			}
+		}
+	}
+	fmt.Println(total)
 }
 
 // Reverse 文字列を反転
@@ -30,22 +49,22 @@ func Reverse(s string) string {
 	return string(runes)
 }
 
-// NextLine buinfo.Scanのポインタを渡し、標準入力の次の行を読み込み
+// GetNextLine buinfo.Scanのポインタを渡し、標準入力の次の行を読み込み
 // ex. sc := buinfo.NewScanner(os.stdin)
 //      GetNextLine(sc)
-func NextLine(sc *bufio.Scanner) string {
+func GetNextLine(sc *bufio.Scanner) string {
 	sc.Scan()
 	s := sc.Text()
 	return strings.TrimSpace(s)
 }
 
-// SplitStrList 文字列を空白区切りの文字列のリストに変換して返却
-func SplitStrList(s string) []string {
+// GetSpaceSplitStrList 文字列を空白区切りの文字列のリストに変換して返却
+func GetSpaceSplitStrList(s string) []string {
 	return strings.Split(s, " ")
 }
 
-// SplitIntlist 文字列を空白区切りの整数値に変換して返却
-func SplitIntlist(s string) []int {
+// GetSpaceSplitIntlist 文字列を空白区切りの整数値に変換して返却
+func GetSpaceSplitIntlist(s string) []int {
 	strList := strings.Split(s, " ")
 	return StrListToIntList(strList)
 }
@@ -93,16 +112,15 @@ func FindMaxAndMin(slice []int) (max, min int) {
 	return max, min
 }
 
-// Sum 合計値を返す
-func Sum(slice []int) (sum int) {
+// GetSum 合計値を返す
+func GetSum(slice []int) (sum int) {
 	for _, i := range slice {
 		sum += i
 	}
 	return sum
 }
 
-// Permutation Pの値を計算
-func Permutation(n int, k int) *big.Int {
+func permutation(n int, k int) *big.Int {
 	v := big.NewInt(1)
 	if 0 < k && k <= n {
 		for i := 0; i < k; i++ {
@@ -115,19 +133,16 @@ func Permutation(n int, k int) *big.Int {
 	return v
 }
 
-// Factorial Fの値を計算
-func Factorial(n int) *big.Int {
-	return Permutation(n, n-1)
+func factorial(n int) *big.Int {
+	return permutation(n, n-1)
 }
 
-// Combination Cの計算
-func Combination(n int, k int) *big.Int {
-	child := Permutation(n, k)
-	mother := Factorial(k)
+func combination(n int, k int) *big.Int {
+	child := permutation(n, k)
+	mother := factorial(k)
 	return child.Div(child, mother)
 }
 
-// Homogeneous Hの計算
-func Homogeneous(n int, k int) *big.Int {
-	return Combination(n+k-1, k)
+func homogeneous(n int, k int) *big.Int {
+	return combination(n+k-1, k)
 }

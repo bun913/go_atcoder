@@ -12,13 +12,13 @@ import (
 var sc = bufio.NewScanner(os.Stdin)
 
 func init() {
-	const max = 1024 * 1024 * 1024
+	const max = 1024 * 1024
 	var buf = make([]byte, max)
 	sc.Buffer(buf, max)
 }
 
 func main() {
-	StrToInt(NextLine(sc))
+	StrToInt(GetNextLine(sc))
 }
 
 // Reverse 文字列を反転
@@ -30,22 +30,22 @@ func Reverse(s string) string {
 	return string(runes)
 }
 
-// NextLine buinfo.Scanのポインタを渡し、標準入力の次の行を読み込み
+// GetNextLine buinfo.Scanのポインタを渡し、標準入力の次の行を読み込み
 // ex. sc := buinfo.NewScanner(os.stdin)
 //      GetNextLine(sc)
-func NextLine(sc *bufio.Scanner) string {
+func GetNextLine(sc *bufio.Scanner) string {
 	sc.Scan()
 	s := sc.Text()
 	return strings.TrimSpace(s)
 }
 
-// SplitStrList 文字列を空白区切りの文字列のリストに変換して返却
-func SplitStrList(s string) []string {
+// GetSpaceSplitStrList 文字列を空白区切りの文字列のリストに変換して返却
+func GetSpaceSplitStrList(s string) []string {
 	return strings.Split(s, " ")
 }
 
-// SplitIntlist 文字列を空白区切りの整数値に変換して返却
-func SplitIntlist(s string) []int {
+// GetSpaceSplitIntlist 文字列を空白区切りの整数値に変換して返却
+func GetSpaceSplitIntlist(s string) []int {
 	strList := strings.Split(s, " ")
 	return StrListToIntList(strList)
 }
@@ -93,8 +93,8 @@ func FindMaxAndMin(slice []int) (max, min int) {
 	return max, min
 }
 
-// Sum 合計値を返す
-func Sum(slice []int) (sum int) {
+// GetSum 合計値を返す
+func GetSum(slice []int) (sum int) {
 	for _, i := range slice {
 		sum += i
 	}
