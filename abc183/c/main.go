@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"math/big"
 	"os"
 	"sort"
@@ -18,7 +19,45 @@ func init() {
 }
 
 func main() {
-	StrToInt(NextStr(sc))
+	NK := SplitIntlist(NextStr(sc))
+	N := NK[0]
+	K := NK[1]
+	// 二次元配列で取得しておく
+	tList := [][]int64{}
+	for range make([]int, N) {
+		l := SplitIntlist(NextStr(sc))
+		tList = append(tList, l)
+	}
+	// 都市のスライス　1から始まるので最初の要素は不要
+	indexex := []int64{}
+	for i := range make([]int, N) {
+		indexex = append(indexex, int64(i))
+	}
+	indexex = indexex[1:]
+	count := 0
+	perm := Permute(indexex)
+	for i := range perm {
+		total := int64(0)
+		for j := range perm[i] {
+			from := perm[i][j]
+			// 1から最初の町の距離を追加する
+			if j == 0 {
+				total += tList[from][0]
+			}
+			to := int64(0)
+			isEnd := j == len(perm[i])-1
+			if isEnd {
+				to = 0
+			} else {
+				to = perm[i][j+1]
+			}
+			total += tList[from][to]
+		}
+		if total == K {
+			count++
+		}
+	}
+	fmt.Println(count)
 }
 
 // Reverse 文字列を反転
@@ -152,6 +191,23 @@ func Permutation(n int64, k int64) *big.Int {
 	return v
 }
 
+// Factorial Fの値を計算
+func Factorial(n int64) *big.Int {
+	return Permutation(n, n-1)
+}
+
+// Combination Cの計算
+func Combination(n int64, k int64) *big.Int {
+	child := Permutation(n, k)
+	mother := Factorial(k)
+	return child.Div(child, mother)
+}
+
+// Homogeneous Hの計算
+func Homogeneous(n int64, k int64) *big.Int {
+	return Combination(n+k-1, k)
+}
+
 // Permute 順列を返す。順列は並び順も考慮する
 func Permute(nums []int64) [][]int64 {
 	n := factorial(len(nums))
@@ -193,26 +249,4 @@ func factorial(n int) int {
 		ret *= i
 	}
 	return ret
-}
-
-// MakeCopy コピーを作成
-func MakeCopy(nums []int) []int {
-	return append([]int{}, nums...)
-}
-
-// Factorial Fの値を計算
-func Factorial(n int64) *big.Int {
-	return Permutation(n, n-1)
-}
-
-// Combination Cの計算
-func Combination(n int64, k int64) *big.Int {
-	child := Permutation(n, k)
-	mother := Factorial(k)
-	return child.Div(child, mother)
-}
-
-// Homogeneous Hの計算
-func Homogeneous(n int64, k int64) *big.Int {
-	return Combination(n+k-1, k)
 }
