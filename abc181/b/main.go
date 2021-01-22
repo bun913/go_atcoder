@@ -2,6 +2,8 @@ package main
 
 import (
 	"bufio"
+	"fmt"
+	"math/big"
 	"os"
 	"sort"
 	"strconv"
@@ -17,7 +19,15 @@ func init() {
 }
 
 func main() {
-	StrToInt(NextStr(sc))
+	N := NextInt(sc)
+	sum := int64(0)
+	for range make([]int64, N) {
+		AB := SplitIntlist(NextStr(sc))
+		A := AB[0]
+		B := AB[1]
+		sum += B*(B+1)/2 - A*(A-1)/2
+	}
+	fmt.Println(sum)
 }
 
 // Reverse 文字列を反転
@@ -39,7 +49,7 @@ func NextStr(sc *bufio.Scanner) string {
 }
 
 // NextInt 次のラインをint型で得る
-func NextInt(sc *bufio.Scanner) int {
+func NextInt(sc *bufio.Scanner) int64 {
 	sc.Scan()
 	s := sc.Text()
 	return StrToInt(s)
@@ -59,7 +69,7 @@ func SplitStrList(s string) []string {
 }
 
 // SplitIntlist 文字列を空白区切りの整数値に変換して返却
-func SplitIntlist(s string) []int {
+func SplitIntlist(s string) []int64 {
 	strList := strings.Split(s, " ")
 	return StrListToIntList(strList)
 }
@@ -71,7 +81,7 @@ func SplitFloatList(s string) []float64 {
 }
 
 // StrListToIntList string型のスライスを渡してint型の配列に変換
-func StrListToIntList(strList []string) (intList []int) {
+func StrListToIntList(strList []string) (intList []int64) {
 	for _, str := range strList {
 		str = strings.TrimRight(str, "\n")
 		i := StrToInt(str)
@@ -90,10 +100,10 @@ func StrListToFloatList(strList []string) (floatList []float64) {
 	return
 }
 
-// StrToInt string型をint型に変換
-func StrToInt(s string) int {
+// StrToInt string型をint64型に変換
+func StrToInt(s string) int64 {
 	i, _ := strconv.Atoi(s)
-	return int(i)
+	return int64(i)
 }
 
 // StrToFloat string型をfloat64型に変換
@@ -103,7 +113,7 @@ func StrToFloat(s string) float64 {
 }
 
 // Sort int型スライスの並び替え
-func Sort(slice []int, order string) []int {
+func Sort(slice []int64, order string) []int64 {
 	sort.SliceStable(slice, func(i, j int) bool {
 		if order == "desc" {
 			return slice[i] > slice[j]
@@ -115,7 +125,7 @@ func Sort(slice []int, order string) []int {
 }
 
 // FindMaxAndMin 最大値最小値を返す
-func FindMaxAndMin(slice []int) (max, min int) {
+func FindMaxAndMin(slice []int64) (max, min int64) {
 	max = slice[0]
 	min = slice[0]
 	for _, elm := range slice {
@@ -130,7 +140,7 @@ func FindMaxAndMin(slice []int) (max, min int) {
 }
 
 // Sum 合計値を返す
-func Sum(slice []int) (sum int) {
+func Sum(slice []int64) (sum int64) {
 	for _, i := range slice {
 		sum += i
 	}
@@ -138,28 +148,28 @@ func Sum(slice []int) (sum int) {
 }
 
 // Permutation Pの値を計算
-func Permutation(n int, k int) int {
-	v := 1
+func Permutation(n int64, k int64) *big.Int {
+	v := big.NewInt(1)
 	if 0 < k && k <= n {
-		for i := 0; i < k; i++ {
-			k := n - i
-			v = v * k
+		for i := int64(0); i < k; i++ {
+			k := big.NewInt(int64(n - i))
+			v = v.Mul(v, k)
 		}
 	} else if k > n {
-		v = 0
+		v = big.NewInt(0)
 	}
 	return v
 }
 
 // Permute 順列を返す。順列は並び順も考慮する
-func Permute(nums []int) [][]int {
+func Permute(nums []int64) [][]int64 {
 	n := factorial(len(nums))
-	ret := make([][]int, 0, n)
+	ret := make([][]int64, 0, n)
 	permute(nums, &ret)
 	return ret
 }
 
-func permute(nums []int, ret *[][]int) {
+func permute(nums []int64, ret *[][]int64) {
 	*ret = append(*ret, makeCopy(nums))
 
 	n := len(nums)
@@ -182,8 +192,8 @@ func permute(nums []int, ret *[][]int) {
 	}
 }
 
-func makeCopy(nums []int) []int {
-	return append([]int{}, nums...)
+func makeCopy(nums []int64) []int64 {
+	return append([]int64{}, nums...)
 }
 
 func factorial(n int) int {
@@ -200,18 +210,18 @@ func MakeCopy(nums []int) []int {
 }
 
 // Factorial Fの値を計算
-func Factorial(n int) int {
+func Factorial(n int64) *big.Int {
 	return Permutation(n, n-1)
 }
 
 // Combination Cの計算
-func Combination(n int, k int) int {
+func Combination(n int64, k int64) *big.Int {
 	child := Permutation(n, k)
 	mother := Factorial(k)
-	return child / mother
+	return child.Div(child, mother)
 }
 
 // Homogeneous Hの計算
-func Homogeneous(n int, k int) int {
+func Homogeneous(n int64, k int64) *big.Int {
 	return Combination(n+k-1, k)
 }
