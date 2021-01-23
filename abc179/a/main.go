@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"sort"
 	"strconv"
@@ -17,7 +18,14 @@ func init() {
 }
 
 func main() {
-	StrToInt(NextStr(sc))
+	S := NextStr(sc)
+	res := ""
+	if strings.HasSuffix(S, "s") {
+		res = S + "es"
+	} else {
+		res = S + "s"
+	}
+	fmt.Println(res)
 }
 
 // Reverse 文字列を反転
@@ -114,26 +122,19 @@ func Sort(slice []int, order string) []int {
 	return slice
 }
 
-// Min 最小値を算出
-func Min(xs ...int) int {
-	min := xs[0]
-	for _, x := range xs[1:] {
-		if min > x {
-			min = x
+// FindMaxAndMin 最大値最小値を返す
+func FindMaxAndMin(slice []int) (max, min int) {
+	max = slice[0]
+	min = slice[0]
+	for _, elm := range slice {
+		if elm > max {
+			max = elm
+		}
+		if elm < min {
+			min = elm
 		}
 	}
-	return min
-}
-
-// Max 最大値を算出
-func Max(xs ...int) int {
-	max := xs[0]
-	for _, x := range xs[1:] {
-		if max < x {
-			max = x
-		}
-	}
-	return max
+	return max, min
 }
 
 // Sum 合計値を返す

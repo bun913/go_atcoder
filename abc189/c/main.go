@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"sort"
 	"strconv"
@@ -17,7 +18,17 @@ func init() {
 }
 
 func main() {
-	StrToInt(NextStr(sc))
+	N := NextInt(sc)
+	A := SplitIntlist(NextStr(sc))
+	res := 0
+	for l := 0; l < N; l++ {
+		min := A[l]
+		for r := l; r < N; r++ {
+			min = Min(min, A[r])
+			res = Max(res, min*(r-l+1))
+		}
+	}
+	fmt.Println(res)
 }
 
 // Reverse 文字列を反転
