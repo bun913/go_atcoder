@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"sort"
 	"strconv"
@@ -18,7 +19,24 @@ func init() {
 }
 
 func main() {
-	StrToInt(NextStr(sc))
+	NextInt(sc)
+	man := 0
+	yu := 0.0
+	che := 0
+	l := SplitIntlist(NextStr(sc))
+	for _, elm := range l {
+		abs := math.Abs(float64(elm))
+		man += int(abs)
+		pow := math.Pow(abs, 2)
+		yu += pow
+		if int(abs) > int(che) {
+			che = int(abs)
+		}
+	}
+	PrintLn(man)
+	yuans := math.Sqrt(yu)
+	PrintFloat(yuans)
+	PrintLn(che)
 }
 
 // PrintLn fmt.Printlnのショート
