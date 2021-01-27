@@ -19,18 +19,16 @@ func init() {
 
 func main() {
 	l := SplitIntlist(NextStr(sc))
-	ab := l[0:2]
-	cd := l[2:4]
-	ans := ab[0] * cd[0]
-	for _, x := range ab {
-		for _, y := range cd {
-			comp := x * y
-			if comp > ans {
-				ans = comp
-			}
-		}
+	N := l[0]
+	X := l[1]
+	T := l[2]
+	i := 0
+	if N%X == 0 {
+		i = N / X
+	} else {
+		i = N/X + 1
 	}
-	PrintLn(ans)
+	PrintLn(T * i)
 }
 
 // PrintLn fmt.Printlnのショート
@@ -244,24 +242,4 @@ func Combination(n int, k int) int {
 // Homogeneous Hの計算
 func Homogeneous(n int, k int) int {
 	return Combination(n+k-1, k)
-}
-
-//組み合わせ
-func combination(ar []int, n int) (result [][]int) {
-	if n <= 0 || len(ar) < n {
-		return
-	}
-	if n == 1 {
-		for _, a := range ar {
-			result = append(result, []int{a})
-		}
-	} else if len(ar) == n {
-		result = append(result, ar)
-	} else {
-		for _, a := range combination(ar[1:], n-1) {
-			result = append(result, append([]int{ar[0]}, a...))
-		}
-		result = append(result, combination(ar[1:], n)...)
-	}
-	return
 }
