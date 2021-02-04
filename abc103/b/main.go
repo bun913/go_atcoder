@@ -18,7 +18,48 @@ func init() {
 }
 
 func main() {
-	StrToInt(NextStr(sc))
+	slist := strings.Split(NextStr(sc), "")
+	tlist := strings.Split(NextStr(sc), "")
+	ans := "No"
+	que := Que{
+		elms: &slist,
+	}
+	for range make([]int, len(slist)) {
+		last := que.pop()
+		que.push(last)
+		if strings.Join(*que.elms, "") == strings.Join(tlist, "") {
+			ans = "Yes"
+			break
+		}
+	}
+	PrintLn(ans)
+}
+
+// Que キューの実装
+type Que struct {
+	elms *[]string
+}
+
+// Queのpop動作
+func (q Que) pop() string {
+	l := *q.elms
+	last := l[len(l)-1]
+	*q.elms = l[:len(l)-1]
+	return last
+}
+
+func (q Que) push(s string) {
+	l := *q.elms
+	l, l[0] = append(l[:1], l[0:]...), s
+	*q.elms = l
+}
+
+// i番目の要素を削除
+func unset(s []string, i int) []string {
+	if i >= len(s) {
+		return s
+	}
+	return append(s[:i], s[i+1:]...)
 }
 
 // PrintLn fmt.Printlnのショート
@@ -232,31 +273,4 @@ func Combination(n int, k int) int {
 // Homogeneous Hの計算
 func Homogeneous(n int, k int) int {
 	return Combination(n+k-1, k)
-}
-
-// Que キューの実装
-type Que struct {
-	elms *[]string
-}
-
-// Queのpop動作
-func (q Que) pop() string {
-	l := *q.elms
-	last := l[len(l)-1]
-	*q.elms = l[:len(l)-1]
-	return last
-}
-
-func (q Que) push(s string) {
-	l := *q.elms
-	l, l[0] = append(l[:1], l[0:]...), s
-	*q.elms = l
-}
-
-// i番目の要素を削除
-func unset(s []string, i int) []string {
-	if i >= len(s) {
-		return s
-	}
-	return append(s[:i], s[i+1:]...)
 }

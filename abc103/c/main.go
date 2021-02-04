@@ -233,30 +233,3 @@ func Combination(n int, k int) int {
 func Homogeneous(n int, k int) int {
 	return Combination(n+k-1, k)
 }
-
-// Que キューの実装
-type Que struct {
-	elms *[]string
-}
-
-// Queのpop動作
-func (q Que) pop() string {
-	l := *q.elms
-	last := l[len(l)-1]
-	*q.elms = l[:len(l)-1]
-	return last
-}
-
-func (q Que) push(s string) {
-	l := *q.elms
-	l, l[0] = append(l[:1], l[0:]...), s
-	*q.elms = l
-}
-
-// i番目の要素を削除
-func unset(s []string, i int) []string {
-	if i >= len(s) {
-		return s
-	}
-	return append(s[:i], s[i+1:]...)
-}
