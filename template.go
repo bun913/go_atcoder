@@ -260,3 +260,12 @@ func unset(s []string, i int) []string {
 	}
 	return append(s[:i], s[i+1:]...)
 }
+
+// MakeBoolMap 文字列のスライスについて存在確認用のmapを作成
+func MakeBoolMap(list []string) map[string]bool {
+	mapped := map[string]bool{}
+	for _, elm := range list {
+		mapped[elm] = true
+	}
+	return mapped
+}
