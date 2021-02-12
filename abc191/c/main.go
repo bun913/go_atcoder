@@ -18,7 +18,32 @@ func init() {
 }
 
 func main() {
-	StrToInt(NextStr(sc))
+	l := SplitIntlist(NextStr(sc))
+	h, w := l[0], l[1]
+	ans := 0
+	matrix := [][]string{}
+	for range make([]int, h) {
+		line := strings.Split(NextStr(sc), "")
+		matrix = append(matrix, line)
+	}
+	for i := 0; i < h-1; i++ {
+		for j := 0; j < w-1; j++ {
+			a := matrix[i][j]
+			b := matrix[i][j+1]
+			c := matrix[i+1][j]
+			d := matrix[i+1][j+1]
+			count := 0
+			for _, elm := range []string{a, b, c, d} {
+				if elm == "#" {
+					count++
+				}
+			}
+			if count == 1 || count == 3 {
+				ans++
+			}
+		}
+	}
+	PrintLn(ans)
 }
 
 // PrintLn fmt.Printlnのショート
